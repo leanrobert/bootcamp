@@ -5,19 +5,25 @@ import './index.css';
 const App = (props) => {
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState([0, 0, 0, 0, 0, 0]);
+  const [max, setMax] = useState(0);
 
   const addVote = (selected) => {
     const copy = [ ...votes]
     copy[selected] += 1
+    const newMax = Math.max(...copy)
+    setMax(newMax)
     setVotes(copy)
   }
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{props.anecdotes[selected]}</p>
       <p>has {votes[selected]} votes</p>
       <button onClick={() => addVote(selected)}>vote</button>
       <button onClick={() => setSelected(Math.floor(Math.random() * props.anecdotes.length))}>next anecdote</button>
+      <h1>Anecdote with most votes</h1>
+      <p>{props.anecdotes[votes.indexOf(max)]}</p>
     </div> 
   )
 }
