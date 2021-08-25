@@ -28,7 +28,9 @@ const App = () => {
     if(persons.find(one => one.name === person.name)) {
       alert(`${person.name} is already added to phonebook`)
     } else {
-      setPersons(persons.concat(person))
+      axios.post("http://localhost:3001/persons", person)
+        .then(promise => setPersons(persons.concat(promise.data)
+        ))
     }
     setNewName('')
     setNewPhone('')
