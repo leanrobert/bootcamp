@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getAll, create } from './services/phonebook'
+import { getAll, create, deletePerson } from './services/phonebook'
 import SearchBar from './components/SearchBar'
 import Form from './components/Form'
 import PhoneBook from './components/PhoneBook'
@@ -31,6 +31,12 @@ const App = () => {
     setNewPhone('')
   }
 
+  const deleteEntry = (person) => {
+    if(window.confirm(`Delete ${person.name} ?`)) {
+      deletePerson(person.id).then(promise => setPersons(persons.filter(item => item.id !== person.id)))
+    }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -38,7 +44,7 @@ const App = () => {
       <h2>Add a new</h2>
       <Form addPerson={addPerson} newName={newName} newPhone={newPhone} setNewName={setNewName} setNewPhone={setNewPhone} />
       <h2>Numbers</h2>
-      <PhoneBook persons={persons} search={search} />
+      <PhoneBook persons={persons} search={search} delentry={deleteEntry}/>
     </div>
   )
 }
