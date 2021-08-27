@@ -22,13 +22,8 @@
     },
     {
       "name": "pepe",
-      "number": "1234",
+      "number": "12345",
       "id": 5
-    },
-    {
-      "name": "peppito",
-      "number": "1234",
-      "id": 6
     }
   ]
 }

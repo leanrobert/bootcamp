@@ -3,12 +3,15 @@ import { getAll, create, update, deletePerson } from './services/phonebook'
 import SearchBar from './components/SearchBar'
 import Form from './components/Form'
 import PhoneBook from './components/PhoneBook'
+import Notification from './components/Notification'
+import './index.css'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newPhone, setNewPhone ] = useState('')
   const [ newName, setNewName ] = useState('')
   const [ search, setSearch ] = useState('')
+  const [ message, setMessage ] = useState(null)
 
   useEffect(() => {
     getAll().then(persons => setPersons(persons.data))
@@ -30,6 +33,7 @@ const App = () => {
       }
 
       create(person).then(promise => setPersons(persons.concat(promise.data)))
+      setMessage(`Contact ${person.name} was created successfully`)
     }
     setNewName('')
     setNewPhone('')
@@ -42,6 +46,7 @@ const App = () => {
     }
 
     update(person.id, newPerson).then(response => setPersons(persons.map(people => person.id !== people.id ? people : response.data)))
+    setMessage(`Contact ${newPerson.name} was updated successfully`)
   }
 
   const deleteEntry = (person) => {
@@ -53,6 +58,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <SearchBar search={search} setSearch={setSearch} />
       <h2>Add a new</h2>
       <Form addPerson={addPerson} newName={newName} newPhone={newPhone} setNewName={setNewName} setNewPhone={setNewPhone} />
