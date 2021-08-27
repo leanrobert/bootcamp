@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getAll, create, deletePerson } from './services/phonebook'
+import { getAll, create, update, deletePerson } from './services/phonebook'
 import SearchBar from './components/SearchBar'
 import Form from './components/Form'
 import PhoneBook from './components/PhoneBook'
@@ -17,18 +17,31 @@ const App = () => {
   const addPerson = (e) => {
     e.preventDefault()
 
-    const person = {
-      name: newName,
-      number: newPhone
-    }
+    const duplicated = persons.find(one => one.name === newName)
 
-    if(persons.find(one => one.name === person.name)) {
-      alert(`${person.name} is already added to phonebook`)
-    } else {
+    if(duplicated) {
+      if(window.confirm(`${duplicated.name} is already added to phonebook, replace the old number with a new one?`)) {
+        updatePerson(duplicated)
+      }
+    } else { 
+      const person = {
+        name: newName,
+        number: newPhone
+      }
+
       create(person).then(promise => setPersons(persons.concat(promise.data)))
     }
     setNewName('')
     setNewPhone('')
+  }
+
+  const updatePerson = (person) => {
+    const newPerson = {
+      name: person.name,
+      number: newPhone
+    }
+
+    update(person.id, newPerson).then(response => setPersons(persons.map(people => person.id !== people.id ? people : response.data)))
   }
 
   const deleteEntry = (person) => {
